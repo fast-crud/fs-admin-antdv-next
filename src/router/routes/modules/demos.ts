@@ -21,6 +21,16 @@ const routes: RouteRecordRaw[] = [
         path: '/demos/ant-design-next',
         component: () => import('#/views/demos/antd/index.vue'),
       },
+      {
+        meta: {
+          icon: 'lucide:table-2',
+          title: 'Fast CRUD HelloWorld',
+        },
+        name: 'FastCrudHelloWorld',
+        path: '/demos/fast-crud/helloworld',
+        component: () =>
+          import('#/views/demos/fast-crud/helloworld/index.vue'),
+      },
     ],
   },
 ];

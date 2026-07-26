@@ -21,6 +21,7 @@
   "scripts": {
     "build": "vite build --mode production",
     "build:analyze": "vite build --mode analyze",
+    "debug": "vite --mode debug --open",
     "dev": "vite --mode development",
     "preview": "vite preview",
     "typecheck": "vue-tsc --noEmit --skipLibCheck"
@@ -30,6 +31,8 @@
   },
   "dependencies": {
     "@ctrl/tinycolor": "^4.1.0",
+    "@fast-crud/fast-crud": "^1.28.1",
+    "@fast-crud/ui-antdv-next": "^1.28.1",
     "@iconify/json": "^2.2.483",
     "@iconify/vue": "^4.1.2",
     "@intlify/core-base": "^9.14.1",
@@ -63,6 +66,7 @@
     "es-toolkit": "^1.23.0",
     "json-bigint": "^1.0.0",
     "lodash.clonedeep": "^4.5.0",
+    "lodash-es": "^4.17.21",
     "nprogress": "^0.2.0",
     "pinia": "^2.2.4",
     "pinia-plugin-persistedstate": "^3.2.1",

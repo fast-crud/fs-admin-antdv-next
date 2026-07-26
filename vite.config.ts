@@ -13,6 +13,25 @@ const vbenPackagesRoot = path.resolve(root, 'src/vben-packages');
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, root);
+  let devAlias = [];
+  let devServerFs = {};
+
+  if (mode.startsWith('debug')) {
+    devAlias = [
+      {
+        find: /@fast-crud\/fast-crud\/dist/,
+        replacement: path.resolve('../../fast-crud/src'),
+      },
+      {
+        find: /@fast-crud\/ui-antdv-next\/dist/,
+        replacement: path.resolve('../../ui/ui-antdv-next/src'),
+      },
+    ];
+    devServerFs = {
+      allow: ['../../../'],
+    };
+    console.log('devAlias', devAlias);
+  }
 
   return {
     plugins: [
@@ -23,6 +42,7 @@ export default defineConfig(({ mode }) => {
     ],
     resolve: {
       alias: [
+        ...devAlias,
         { find: '#', replacement: path.resolve(root, 'src') },
         {
           find: /^@vben\/common-ui\/es\/(.+)$/,
@@ -126,6 +146,7 @@ export default defineConfig(({ mode }) => {
           './src/{views,layouts,router,store,api,adapter}/*',
         ],
       },
+      fs: devServerFs,
       ...(env.VITE_API_PROXY_TARGET && env.VITE_NITRO_MOCK !== 'true'
         ? {
             proxy: {

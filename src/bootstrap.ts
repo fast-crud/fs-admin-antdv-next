@@ -1,5 +1,7 @@
 import { createApp, watchEffect } from 'vue';
 
+import AntdvNext from 'antdv-next';
+
 import { registerAccessDirective } from '@vben/access';
 import { registerLoadingDirective } from '@vben/common-ui/es/loading';
 import { preferences } from '@vben/preferences';
@@ -15,6 +17,7 @@ import { initComponentAdapter } from './adapter/component';
 import { initSetupVbenForm } from './adapter/form';
 import App from './app.vue';
 import { router } from './router';
+import fastCrudPlugin from './plugin';
 
 async function bootstrap(namespace: string) {
   // 初始化组件适配器
@@ -33,6 +36,9 @@ async function bootstrap(namespace: string) {
   // });
 
   const app = createApp(App);
+
+  // 注册 Antdv Next 全局组件
+  app.use(AntdvNext);
 
   // 注册v-loading指令
   registerLoadingDirective(app, {
@@ -55,6 +61,7 @@ async function bootstrap(namespace: string) {
 
   // 配置路由及路由守卫
   app.use(router);
+  app.use(fastCrudPlugin);
 
   // 配置Motion插件
   const { MotionPlugin } = await import('@vben/plugins/motion');
