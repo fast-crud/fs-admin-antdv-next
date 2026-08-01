@@ -3,6 +3,11 @@ import type { Plugin } from 'vite';
 
 import { randomUUID } from 'node:crypto';
 
+import qs from 'qs';
+
+import componentSelectMocks from './src/views/demos/fast-crud/component/select/mock';
+import componentTextMocks from './src/views/demos/fast-crud/component/text/mock';
+
 interface MockUser {
   id: number;
   password: string;
@@ -91,9 +96,57 @@ const demoMenus = [
           title: 'demos.antd.title',
         },
       },
+      {
+        meta: {
+          icon: 'lucide:table-2',
+          title: 'Fast CRUD',
+        },
+        name: 'FastCrud',
+        path: '/demos/fast-crud',
+        redirect: '/demos/fast-crud/helloworld',
+        children: [
+          {
+            meta: {
+              title: 'Fast CRUD HelloWorld',
+            },
+            name: 'FastCrudHelloWorld',
+            path: '/demos/fast-crud/helloworld',
+            component: '/demos/fast-crud/helloworld/index',
+          },
+          {
+            meta: {
+              icon: 'lucide:component',
+              title: '组件示例',
+            },
+            name: 'FastCrudComponent',
+            path: '/demos/fast-crud/component',
+            redirect: '/demos/fast-crud/component/text',
+            children: [
+              {
+                meta: {
+                  title: '文本输入(input)',
+                },
+                name: 'ComponentText',
+                path: '/demos/fast-crud/component/text',
+                component: '/demos/fast-crud/component/text/index',
+              },
+              {
+                meta: {
+                  title: '选择(select)',
+                },
+                name: 'ComponentSelect',
+                path: '/demos/fast-crud/component/select',
+                component: '/demos/fast-crud/component/select/index',
+              },
+            ],
+          },
+        ],
+      },
     ],
   },
 ];
+
+const viewMocks = [...componentTextMocks, ...componentSelectMocks];
 
 function jsonResponse(
   response: ServerResponse,
@@ -137,6 +190,11 @@ function getCookies(request: IncomingMessage) {
         return [key, decodeURIComponent(value.join('='))];
       }),
   );
+}
+
+function getRequestParams(request: IncomingMessage) {
+  const url = new URL(request.url ?? '/', 'http://localhost');
+  return qs.parse(url.search.slice(1));
 }
 
 function getUserFromAccessToken(request: IncomingMessage) {
@@ -193,8 +251,11 @@ export function createLocalMockApiPlugin(): Plugin {
           request.url ?? '/',
           'http://localhost',
         ).pathname;
+        const mockPathname = pathname.startsWith('/api/mock/')
+          ? pathname.replace(/^\/api/, '')
+          : pathname;
 
-        if (!pathname.startsWith('/api/')) {
+        if (!pathname.startsWith('/api/') && !pathname.startsWith('/mock/')) {
           next();
           return;
         }
@@ -310,6 +371,57 @@ export function createLocalMockApiPlugin(): Plugin {
             }
 
             jsonResponse(response, success(getMenuList()));
+            return;
+          }
+
+          if (
+            mockPathname === '/mock/dicts/OpenStatusEnum' &&
+            method === 'GET'
+          ) {
+            jsonResponse(
+              response,
+              success([
+                {
+                  value: '1',
+                  label: '打开',
+                  color: 'success',
+                },
+                {
+                  value: '2',
+                  label: '停止',
+                  color: 'cyan',
+                },
+                {
+                  value: '0',
+                  label: '关闭',
+                  color: 'red',
+                },
+              ]),
+            );
+            return;
+          }
+
+          const mock = viewMocks.find(
+            (item: any) =>
+              item.path === mockPathname &&
+              item.method.toUpperCase() === method.toUpperCase(),
+          );
+          if (mock) {
+            const params = getRequestParams(request);
+            const body = method === 'GET' ? params : await readJsonBody(request);
+            const result = await mock.handle({
+              body,
+              params,
+            });
+            if (result.code === 0) {
+              jsonResponse(response, success(result.data));
+            } else {
+              jsonResponse(
+                response,
+                errorResponse(result.msg ?? 'Mock request failed.'),
+                400,
+              );
+            }
             return;
           }
 

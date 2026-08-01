@@ -24,12 +24,49 @@ const routes: RouteRecordRaw[] = [
       {
         meta: {
           icon: 'lucide:table-2',
-          title: 'Fast CRUD HelloWorld',
+          title: 'Fast CRUD',
         },
-        name: 'FastCrudHelloWorld',
-        path: '/demos/fast-crud/helloworld',
-        component: () =>
-          import('#/views/demos/fast-crud/helloworld/index.vue'),
+        name: 'FastCrud',
+        path: '/demos/fast-crud',
+        children: [
+          {
+            meta: {
+              title: 'Fast CRUD HelloWorld',
+            },
+            name: 'FastCrudHelloWorld',
+            path: '/demos/fast-crud/helloworld',
+            component: () =>
+              import('#/views/demos/fast-crud/helloworld/index.vue'),
+          },
+          {
+            meta: {
+              icon: 'lucide:component',
+              title: '组件示例',
+            },
+            name: 'FastCrudComponent',
+            path: '/demos/fast-crud/component',
+            children: [
+              {
+                meta: {
+                  title: '文本输入(input)',
+                },
+                name: 'ComponentText',
+                path: '/demos/fast-crud/component/text',
+                component: () =>
+                  import('#/views/demos/fast-crud/component/text/index.vue'),
+              },
+              {
+                meta: {
+                  title: '选择(select)',
+                },
+                name: 'ComponentSelect',
+                path: '/demos/fast-crud/component/select',
+                component: () =>
+                  import('#/views/demos/fast-crud/component/select/index.vue'),
+              },
+            ],
+          },
+        ],
       },
     ],
   },
