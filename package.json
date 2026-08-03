@@ -1,6 +1,6 @@
 {
   "name": "@fast-crud/fs-admin-antdv-next",
-  "version": "1.28.6",
+  "version": "1.28.7",
   "private": true,
   "description": "Vben Admin - Ant Design Vue Next (Standalone)",
   "homepage": "https://vben.pro",
@@ -33,7 +33,7 @@
   "dependencies": {
     "@antdv-next/icons": "^1.1.1",
     "@ctrl/tinycolor": "^4.1.0",
-    "@fast-crud/fast-crud": "^1.28.6",
+    "@fast-crud/fast-crud": "^1.28.7",
     "@fast-crud/ui-antdv-next": "^1.28.1",
     "@iconify/json": "^2.2.483",
     "@iconify/vue": "^4.1.2",
