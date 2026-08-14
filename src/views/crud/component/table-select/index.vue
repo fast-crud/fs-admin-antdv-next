@@ -1,0 +1,88 @@
+<template>
+  <fs-page>
+    <template #header>
+      <div class="title">table-select</div>
+      <div class="more">
+        <fs-label label="直接设置值">
+          <fs-table-select v-model="value" :dict="singleDictRef" :create-crud-options="createCrudOptionsText" />
+          <a-button @click="setValue"> 设置值 </a-button>
+        </fs-label>
+
+        <fs-label label="自定义插槽">
+          【{{ value }}】
+          <fs-table-select v-model="value" :dict="singleDictRef" :create-crud-options="createCrudOptionsText">
+            <template #default="scope">
+              <fs-button @click="scope.open()"> 选择 </fs-button>
+            </template>
+          </fs-table-select>
+        </fs-label>
+
+        <fs-label label="当前选中省略">
+          <fs-table-select
+            v-model="multiValue"
+            :dict="singleDictRef"
+            :multiple="true"
+            :values-format="{ maxVisible: 1, labelFormatter: formatLabel }"
+            :create-crud-options="createCrudOptionsText"
+          />
+          <a-button @click="setMultiValue"> 设置三项 </a-button>
+        </fs-label>
+      </div>
+    </template>
+    <fs-crud ref="crudRef" v-bind="crudBinding" />
+  </fs-page>
+</template>
+
+<script lang="ts">
+import createCrudOptionsText from "../text/crud";
+import { defineComponent, onMounted, ref } from "vue";
+import createCrudOptions from "./crud.js";
+import { useFsAsync, useFsRef, dict } from "@fast-crud/fast-crud";
+import * as textTableApi from "/@/views/crud/component/text/api";
+
+export default defineComponent({
+  name: "ComponentTableSelect",
+  setup() {
+    const { crudRef, crudBinding } = useFsRef();
+
+    // 页面打开后获取列表数据
+    onMounted(async () => {
+      const { crudExpose } = await useFsAsync({ crudBinding, crudRef, createCrudOptions });
+
+      await crudExpose.doRefresh();
+    });
+
+    const value = ref(null);
+    const multiValue = ref([1, 2, 3]);
+
+    const singleDictRef = dict({
+      value: "id",
+      label: "name",
+      //重要，根据value懒加载数据
+      getNodesByValues: async (values: any[]) => {
+        return await textTableApi.GetByIds(values);
+      }
+    });
+    function setValue() {
+      value.value = 1;
+    }
+    function setMultiValue() {
+      multiValue.value = [1, 2, 3];
+    }
+    function formatLabel(item: any) {
+      return `${item.id}.${item.name}`;
+    }
+    return {
+      crudBinding,
+      crudRef,
+      value,
+      multiValue,
+      singleDictRef,
+      createCrudOptionsText,
+      setValue,
+      setMultiValue,
+      formatLabel
+    };
+  }
+});
+</script>

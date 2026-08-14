@@ -13,7 +13,7 @@ const vbenPackagesRoot = path.resolve(root, 'src/vben-packages');
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, root);
-  let devAlias = [];
+  let devAlias:any[] = [];
   let devServerFs = {};
 
   if (mode.startsWith('debug')) {
@@ -25,6 +25,22 @@ export default defineConfig(({ mode }) => {
       {
         find: /@fast-crud\/ui-antdv-next\/dist/,
         replacement: path.resolve('../../ui/ui-antdv-next/src'),
+      },
+      {
+        find: /@fast-crud\/ui-interface\/dist/,
+        replacement: path.resolve('../../ui/ui-interface/src'),
+      },
+      {
+        find: /@fast-crud\/fast-extends\/dist/,
+        replacement: path.resolve('../../fast-extends/src'),
+      },
+      {
+        find: /@fast-crud\/editor-code\/dist/,
+        replacement: path.resolve('../../fs-ecology/editor-code/src'),
+      },
+      {
+        find: /@fast-crud\/editor-markdown\/dist/,
+        replacement: path.resolve('../../fs-ecology/editor-markdown/src'),
       },
     ];
     devServerFs = {
