@@ -11,7 +11,6 @@ import UiAntdvNext from '@fast-crud/ui-antdv-next';
 import '@fast-crud/ui-antdv-next/dist/style.css';
 
 function install(app: any) {
-  debugger
   app.use(UiAntdvNext);
   app.use(FastCrud, {
     commonOptions(): CrudOptions {
