@@ -1,4 +1,4 @@
-import { requestForMock } from "/src/api/service";
+import { requestForMock } from "#/api/service";
 const request = requestForMock;
 const apiPrefix = "/mock/FormBase";
 export function GetList(query: any) {

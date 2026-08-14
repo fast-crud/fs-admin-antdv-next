@@ -107,11 +107,19 @@ export const useAuthStore = defineStore('auth', () => {
     loginLoading.value = false;
   }
 
+  function isLogin() {
+    return accessStore.isLogin();
+  }
+  function getToken() {
+    return accessStore.accessToken;
+  }
   return {
     $reset,
     authLogin,
     fetchUserInfo,
     loginLoading,
     logout,
+    isLogin,
+    getToken,
   };
 });

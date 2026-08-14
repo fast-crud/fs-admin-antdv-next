@@ -1,5 +1,5 @@
 import * as api from "./api";
-import { requestForMock } from "/src/api/service";
+import { requestForMock } from "#/api/service";
 import { AddReq, CreateCrudOptionsProps, CreateCrudOptionsRet, DelReq, EditReq, GetContextFn, ScopeContext, useCompute, UserPageQuery, UserPageRes } from "@fast-crud/fast-crud";
 import { message } from "antdv-next";
 import { computed } from "vue";

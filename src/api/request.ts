@@ -109,5 +109,5 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
 export const requestClient = createRequestClient(apiURL, {
   responseReturn: 'data',
 });
-
+export const requestForMock:any = requestClient.request.bind(requestClient);
 export const baseRequestClient = new RequestClient({ baseURL: apiURL });

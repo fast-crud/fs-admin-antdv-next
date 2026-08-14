@@ -98,6 +98,9 @@ export const useAccessStore = defineStore('core-access', {
       this.isLockScreen = false;
       this.lockScreenPassword = undefined;
     },
+    isLogin() {
+      return this.accessToken !== null;
+    },
   },
   persist: {
     // 持久化

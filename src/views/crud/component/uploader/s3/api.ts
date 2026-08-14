@@ -1,4 +1,4 @@
-import { requestForMock } from "/src/api/service";
+import { requestForMock } from "#/api/service";
 import { generateSignedUrl } from "/@/views/crud/component/uploader/s3/s3-server";
 import { FsUploaderS3SignedUrlType } from "@fast-crud/fast-extends";
 const request = requestForMock;

@@ -1,5 +1,5 @@
 import * as api from "./api";
-import { requestForMock } from "/src/api/service";
+import { requestForMock } from "#/api/service";
 import { AddReq, CreateCrudOptionsProps, CreateCrudOptionsRet, DelReq, dict, EditReq, UserPageQuery, UserPageRes, utils, useUi } from "@fast-crud/fast-crud";
 
 export default async function ({ crudExpose }: CreateCrudOptionsProps): Promise<CreateCrudOptionsRet> {

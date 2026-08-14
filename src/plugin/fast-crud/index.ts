@@ -10,8 +10,12 @@ import '@fast-crud/fast-crud/dist/style.css';
 import UiAntdvNext from '@fast-crud/ui-antdv-next';
 import '@fast-crud/ui-antdv-next/dist/style.css';
 
+import { FsExtendsCopyable } from '@fast-crud/fast-extends';
+import "@fast-crud/fast-extends/dist/style.css"
+
 function install(app: any) {
   app.use(UiAntdvNext);
+  app.use(FsExtendsCopyable)
   app.use(FastCrud, {
     commonOptions(): CrudOptions {
       return {

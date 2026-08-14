@@ -1,5 +1,5 @@
 //@ts-ignore
-import { requestForMock } from "/src/api/service";
+import { requestForMock } from "#/api/service";
 const request = requestForMock;
 const apiPrefix = "/mock/AdvancedInDrawerClassTime";
 export function GetList(query: any) {
