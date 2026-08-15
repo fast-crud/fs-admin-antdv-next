@@ -138,10 +138,10 @@ function install(app: any, options: any = {}) {
           async afterSubmit({ mode }) {
             if (mode === "add") {
               //@ts-ignore
-              notification.success({ message: "添加成功" });
+              notification.success({ title: "添加成功" });
             } else if (mode === "edit") {
               //@ts-ignore
-              notification.success({ message: "保存成功" });
+              notification.success({ title: "保存成功" });
             }
           },
           wrapperCol: {

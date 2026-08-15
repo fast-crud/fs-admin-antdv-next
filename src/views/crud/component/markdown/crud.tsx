@@ -22,7 +22,7 @@ function uploadMarkdownImage(position: number, file: File, editor: any) {
       editor.$img2Url(position, "http://www.docmirror.cn:7070" + path);
     })
     .catch(() => {
-      notification.error({ message: "图片上传失败" });
+      notification.error({ title: "图片上传失败" });
     });
 }
 

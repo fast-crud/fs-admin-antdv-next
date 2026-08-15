@@ -32,7 +32,7 @@ export default async function ({ crudExpose }: CreateCrudOptionsProps): Promise<
                     await importTable(crudExpose, { file, append: true });
                     modal.destroy();
                     notification.success({
-                      message: "导入成功"
+                      title: "导入成功"
                     });
                   }
                   return (

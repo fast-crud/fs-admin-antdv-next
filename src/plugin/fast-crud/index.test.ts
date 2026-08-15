@@ -40,6 +40,8 @@ vi.mock('../permission', () => ({
 }));
 
 import fastCrudPlugin from './index';
+import { FastCrud } from '@fast-crud/fast-crud';
+import { notification } from 'antdv-next';
 
 describe('fast-crud plugin', () => {
   it('installs with the Antdv Next adapter', () => {
@@ -47,5 +49,20 @@ describe('fast-crud plugin', () => {
 
     expect(() => fastCrudPlugin.install(app)).not.toThrow();
     expect(app.use).toHaveBeenCalled();
+  });
+
+  it('uses the Antdv Next notification title for successful saves', async () => {
+    const app = { use: vi.fn() };
+
+    fastCrudPlugin.install(app);
+    const [, options] = app.use.mock.calls.find(([plugin]) => plugin === FastCrud);
+    const crudOptions = options.commonOptions({
+      crudExpose: { crudBinding: { value: {} } },
+      context: {}
+    });
+
+    await crudOptions.form.afterSubmit({ mode: 'edit' });
+
+    expect(notification.success).toHaveBeenCalledWith({ title: '保存成功' });
   });
 });
