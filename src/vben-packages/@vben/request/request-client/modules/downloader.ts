@@ -38,7 +38,7 @@ class FileDownloader {
     const clientAny = this.client as any;
 
     if (typeof clientAny.request === 'function') {
-      return await clientAny.request(url, finalConfig);
+      return await clientAny.request({ ...finalConfig, url });
     }
     const lower = method.toLowerCase();
 

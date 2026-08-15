@@ -60,6 +60,7 @@ export default defineConfig(({ mode }) => {
       alias: [
         ...devAlias,
         { find: '#', replacement: path.resolve(root, 'src') },
+        { find: '/@', replacement: path.resolve(root, 'src') },
         {
           find: /^@vben\/common-ui\/es\/(.+)$/,
           replacement: `${vbenPackagesRoot}/@vben/common-ui/components/$1`,

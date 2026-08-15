@@ -100,14 +100,14 @@ class RequestClient {
     url: string,
     config?: RequestClientConfig,
   ): Promise<T> {
-    return this.request<T>(url, { ...config, method: 'DELETE' });
+    return this.request<T>({ ...config, method: 'DELETE', url });
   }
 
   /**
    * GET请求方法
    */
   public get<T = any>(url: string, config?: RequestClientConfig): Promise<T> {
-    return this.request<T>(url, { ...config, method: 'GET' });
+    return this.request<T>({ ...config, method: 'GET', url });
   }
 
   /**
@@ -125,7 +125,7 @@ class RequestClient {
     data?: any,
     config?: RequestClientConfig,
   ): Promise<T> {
-    return this.request<T>(url, { ...config, data, method: 'POST' });
+    return this.request<T>({ ...config, data, method: 'POST', url });
   }
 
   /**
@@ -136,13 +136,23 @@ class RequestClient {
     data?: any,
     config?: RequestClientConfig,
   ): Promise<T> {
-    return this.request<T>(url, { ...config, data, method: 'PUT' });
+    return this.request<T>({ ...config, data, method: 'PUT', url });
   }
 
   /**
    * 通用的请求方法
    */
-  public async request<T>(
+  public request<T>(config: RequestClientConfig): Promise<T> {
+    if (!config.url) {
+      return Promise.reject(new Error('Request URL is required.'));
+    }
+    return this.doRequest<T>(config.url, config);
+  }
+
+  /**
+   * 使用指定 URL 发送请求。
+   */
+  public async doRequest<T>(
     url: string,
     config: RequestClientConfig,
   ): Promise<T> {

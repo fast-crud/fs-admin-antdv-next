@@ -19,7 +19,7 @@ import { useFsRef, utils, useFsAsync } from "@fast-crud/fast-crud";
 import createCrudOptions from "./crud";
 import * as api from "./api";
 import { message } from "antdv-next";
-import { useTabbarStore } from "/@/vben/stores/modules/tabbar";
+import { useTabbarStore } from "@vben/stores";
 
 export default defineComponent({
   name: "FormNewPageEdit",

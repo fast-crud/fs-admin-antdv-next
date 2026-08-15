@@ -1,5 +1,5 @@
 import * as api from "./api";
-import { requestForMock } from "#/api/service";
+import { requestForMock } from "#/api/request";
 import { AddReq, CreateCrudOptionsProps, CreateCrudOptionsRet, DelReq, dict, DictOnReadyContext, EditReq, UserPageQuery, UserPageRes, useUi, utils } from "@fast-crud/fast-crud";
 import { computed, ref } from "vue";
 import { debounce } from "lodash-es";

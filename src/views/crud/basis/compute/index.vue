@@ -29,9 +29,6 @@
 import { computed, defineComponent, onMounted, ref } from "vue";
 import { useFs, useFsRef } from "@fast-crud/fast-crud";
 import createCrudOptions from "./crud";
-import { useTour } from "/@/views/crud/basis/first/use-tour";
-import { FirstRow } from "/@/views/crud/basis/first/api";
-import { FirstContext } from "/@/views/crud/basis/first/crud";
 
 export default defineComponent({
   name: "BasisCompute",

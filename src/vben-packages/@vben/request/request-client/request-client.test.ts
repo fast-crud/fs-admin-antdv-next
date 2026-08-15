@@ -41,6 +41,31 @@ describe('requestClient', () => {
     expect(response.data).toEqual(mockData);
   });
 
+  it('should accept a complete request config', async () => {
+    const postData = { key: 'value' };
+    const mockData = { data: 'response' };
+    mock.onPost('/test/request', postData).reply(200, mockData);
+
+    const response = await requestClient.request({
+      data: postData,
+      method: 'POST',
+      url: '/test/request',
+    });
+
+    expect(response.data).toEqual(mockData);
+  });
+
+  it('should make a request through doRequest', async () => {
+    const mockData = { data: 'response' };
+    mock.onGet('/test/do-request').reply(200, mockData);
+
+    const response = await requestClient.doRequest('/test/do-request', {
+      method: 'GET',
+    });
+
+    expect(response.data).toEqual(mockData);
+  });
+
   it('should successfully make a DELETE request', async () => {
     const mockData = { data: 'delete response' };
     mock.onDelete('/test/delete').reply(200, mockData);

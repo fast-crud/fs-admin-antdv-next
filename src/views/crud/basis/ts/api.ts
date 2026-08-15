@@ -1,5 +1,5 @@
 //@ts-ignore
-import { requestForMock } from "#/api/service";
+import { requestForMock } from "#/api/request";
 const request = requestForMock;
 const apiPrefix = "/mock/FsCrudFirst";
 
@@ -16,7 +16,7 @@ export type TsTestRow = {
 export function GetList(query: TsTestRow) {
   return request({
     url: apiPrefix + "/page",
-    method: "get",
+    method: "post",
     data: query
   });
 }

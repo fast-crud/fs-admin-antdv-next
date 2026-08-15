@@ -75,7 +75,7 @@ export const authenticateResponseInterceptor = ({
         return new Promise((resolve) => {
           client.refreshTokenQueue.push((newToken: string) => {
             config.headers.Authorization = formatToken(newToken);
-            resolve(client.request(config.url, { ...config }));
+            resolve(client.request({ ...config }));
           });
         });
       }
@@ -93,7 +93,7 @@ export const authenticateResponseInterceptor = ({
         // 清空队列
         client.refreshTokenQueue = [];
 
-        return client.request(error.config.url, { ...error.config });
+        return client.request({ ...error.config });
       } catch (refreshError) {
         // 如果刷新 token 失败，处理错误（如强制登出或跳转登录页面）
         client.refreshTokenQueue.forEach((callback) => callback(''));

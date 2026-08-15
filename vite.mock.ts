@@ -1,12 +1,11 @@
 import type { IncomingMessage, ServerResponse } from 'node:http';
-import type { Plugin } from 'vite';
+import type { Plugin, ViteDevServer } from 'vite';
 
 import { randomUUID } from 'node:crypto';
+import { readdir } from 'node:fs/promises';
+import path from 'node:path';
 
 import qs from 'qs';
-
-import componentSelectMocks from './src/views/demos/fast-crud/component/select/mock';
-import componentTextMocks from './src/views/demos/fast-crud/component/text/mock';
 
 interface MockUser {
   id: number;
@@ -45,6 +44,40 @@ const users: MockUser[] = [
 
 const accessTokens = new Map<string, string>();
 const refreshTokens = new Map<string, string>();
+const openStatusOptions = [
+  {
+    value: '1',
+    label: '打开',
+    color: 'success',
+  },
+  {
+    value: '2',
+    label: '停止',
+    color: 'cyan',
+  },
+  {
+    value: '0',
+    label: '关闭',
+    color: 'red',
+  },
+];
+const moreOpenStatusOptions = [
+  {
+    value: '1',
+    label: '打开(open)',
+    color: 'success',
+  },
+  {
+    value: '2',
+    label: '停止(stop)',
+    color: 'cyan',
+  },
+  {
+    value: '0',
+    label: '关闭(close)',
+    color: 'red',
+  },
+];
 
 const dashboardMenus = [
   {
@@ -146,7 +179,34 @@ const demoMenus = [
   },
 ];
 
-const viewMocks = [...componentTextMocks, ...componentSelectMocks];
+interface ViewMock {
+  handle: (request: { body: any; params: any }) => any;
+  method: string;
+  path: string;
+}
+
+export async function findViewMockFiles(viewsDirectory: string) {
+  const entries = await readdir(viewsDirectory, { recursive: true });
+
+  return entries
+    .filter((entry) => entry.endsWith('mock.ts'))
+    .map((entry) => path.resolve(viewsDirectory, entry))
+    .sort();
+}
+
+async function loadViewMocks(server: ViteDevServer) {
+  const mockFiles = await findViewMockFiles(
+    path.resolve(process.cwd(), 'src/views'),
+  );
+  const modules = await Promise.all(
+    mockFiles.map((mockFile) => server.ssrLoadModule(mockFile)),
+  );
+
+  return modules.flatMap((module) => {
+    const mock = module.default;
+    return Array.isArray(mock) ? mock : [];
+  }) as ViewMock[];
+}
 
 function jsonResponse(
   response: ServerResponse,
@@ -242,9 +302,13 @@ function getAccessCodes(username: string) {
 }
 
 export function createLocalMockApiPlugin(): Plugin {
+  let viewMocksPromise: Promise<ViewMock[]> | undefined;
+
   return {
     name: 'local-mock-api',
     configureServer(server) {
+      viewMocksPromise = loadViewMocks(server);
+
       server.middlewares.use(async (request, response, next) => {
         const method = request.method ?? 'GET';
         const pathname = new URL(
@@ -375,32 +439,22 @@ export function createLocalMockApiPlugin(): Plugin {
           }
 
           if (
-            mockPathname === '/mock/dicts/OpenStatusEnum' &&
-            method === 'GET'
+            (mockPathname === '/mock/dicts/OpenStatusEnum' ||
+              mockPathname === '/mock/dicts/moreOpenStatusEnum') &&
+            (method === 'GET' || method === 'POST')
           ) {
             jsonResponse(
               response,
-              success([
-                {
-                  value: '1',
-                  label: '打开',
-                  color: 'success',
-                },
-                {
-                  value: '2',
-                  label: '停止',
-                  color: 'cyan',
-                },
-                {
-                  value: '0',
-                  label: '关闭',
-                  color: 'red',
-                },
-              ]),
+              success(
+                mockPathname === '/mock/dicts/moreOpenStatusEnum'
+                  ? moreOpenStatusOptions
+                  : openStatusOptions,
+              ),
             );
             return;
           }
 
+          const viewMocks = await viewMocksPromise;
           const mock = viewMocks.find(
             (item: any) =>
               item.path === mockPathname &&

@@ -1,4 +1,4 @@
-import { requestForMock } from "#/api/service";
+import { requestForMock } from "#/api/request";
 import { generateSignedUrl } from "/@/views/crud/component/uploader/s3/s3-server";
 import { FsUploaderS3SignedUrlType } from "@fast-crud/fast-extends";
 const request = requestForMock;
@@ -6,7 +6,7 @@ const apiPrefix = "/mock/S3Uploader";
 export function GetList(query: any) {
   return request({
     url: apiPrefix + "/page",
-    method: "get",
+    method: "post",
     data: query
   });
 }

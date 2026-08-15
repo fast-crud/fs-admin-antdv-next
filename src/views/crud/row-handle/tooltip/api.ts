@@ -1,10 +1,10 @@
-import { requestForMock } from "#/api/service";
+import { requestForMock } from "#/api/request";
 const request = requestForMock;
 const apiPrefix = "/mock/RowHandleTooltip";
 export function GetList(query: any) {
   return request({
     url: apiPrefix + "/page",
-    method: "get",
+    method: "post",
     data: query
   });
 }
